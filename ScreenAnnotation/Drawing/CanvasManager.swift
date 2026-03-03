@@ -155,6 +155,7 @@ class CanvasManager: ObservableObject {
 
         case .lasso:
             if lassoTool.hasSelection {
+                saveUndoState()
                 lassoTool.beginMove(at: point.position)
             } else {
                 lassoTool.beginSelection(at: point.position)
@@ -334,15 +335,21 @@ class CanvasManager: ObservableObject {
 
     // MARK: - Undo / Redo
 
+    private static let maxUndoLevels = 50
+
+    private func currentSnapshot() -> CanvasState {
+        CanvasState(
+            strokes: strokes.map { $0.deepCopy() },
+            shapeAnnotations: shapeAnnotations.map { $0.deepCopy() },
+            textAnnotations: textAnnotations.map { $0.deepCopy() },
+            signatureAnnotations: signatureAnnotations.map { $0.deepCopy() }
+        )
+    }
+
     private func saveUndoState() {
-        undoStack.append(CanvasState(
-            strokes: strokes,
-            shapeAnnotations: shapeAnnotations,
-            textAnnotations: textAnnotations,
-            signatureAnnotations: signatureAnnotations
-        ))
+        undoStack.append(currentSnapshot())
         redoStack.removeAll()
-        if undoStack.count > 50 {
+        if undoStack.count > Self.maxUndoLevels {
             undoStack.removeFirst()
         }
     }
@@ -352,12 +359,10 @@ class CanvasManager: ObservableObject {
 
     func undo() {
         guard let previous = undoStack.popLast() else { return }
-        redoStack.append(CanvasState(
-            strokes: strokes,
-            shapeAnnotations: shapeAnnotations,
-            textAnnotations: textAnnotations,
-            signatureAnnotations: signatureAnnotations
-        ))
+        redoStack.append(currentSnapshot())
+        if redoStack.count > Self.maxUndoLevels {
+            redoStack.removeFirst()
+        }
         strokes = previous.strokes
         shapeAnnotations = previous.shapeAnnotations
         textAnnotations = previous.textAnnotations
@@ -366,13 +371,8 @@ class CanvasManager: ObservableObject {
 
     func redo() {
         guard let next = redoStack.popLast() else { return }
-        undoStack.append(CanvasState(
-            strokes: strokes,
-            shapeAnnotations: shapeAnnotations,
-            textAnnotations: textAnnotations,
-            signatureAnnotations: signatureAnnotations
-        ))
-        if undoStack.count > 50 {
+        undoStack.append(currentSnapshot())
+        if undoStack.count > Self.maxUndoLevels {
             undoStack.removeFirst()
         }
         strokes = next.strokes

@@ -6,7 +6,6 @@ class AnnotationOverlayView: NSView {
 
   weak var canvasManager: CanvasManager?
 
-  override var isFlipped: Bool { true }
   override var isOpaque: Bool { false }
 
   override func hitTest(_ point: NSPoint) -> NSView? {

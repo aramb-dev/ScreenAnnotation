@@ -1,3 +1,4 @@
+import Carbon.HIToolbox
 import Cocoa
 import Combine
 import MetalKit
@@ -19,6 +20,7 @@ class CanvasView: NSView {
         setupOverlay()
         setupTextEditor()
         observeTextEditor()
+        wireNeedsDisplay()
     }
 
     required init?(coder: NSCoder) {
@@ -28,6 +30,7 @@ class CanvasView: NSView {
         setupOverlay()
         setupTextEditor()
         observeTextEditor()
+        wireNeedsDisplay()
     }
 
     private func setupMetal() {
@@ -78,12 +81,17 @@ class CanvasView: NSView {
                 if let annotation {
                     self.textEditorView.startEditing(annotation: annotation)
                 } else {
-                    if !self.textEditorView.isHidden {
-                        self.textEditorView.commitEditing()
-                    }
+                    // Just hide — commitEditing() is called via onCommit to avoid re-entrancy
+                    self.textEditorView.isHidden = true
                 }
             }
             .store(in: &cancellables)
+    }
+
+    private func wireNeedsDisplay() {
+        canvasManager.setNeedsDisplayCallback { [weak self] in
+            self?.requestRedraw()
+        }
     }
 
     private func requestRedraw() {
@@ -156,7 +164,7 @@ class CanvasView: NSView {
         let modifiers = event.modifierFlags
 
         // Delete / Backspace — delete selected strokes
-        if event.keyCode == 51 || event.keyCode == 117 {
+        if event.keyCode == UInt16(kVK_Delete) || event.keyCode == UInt16(kVK_ForwardDelete) {
             canvasManager.deleteSelectedStrokes()
             requestRedraw()
             return

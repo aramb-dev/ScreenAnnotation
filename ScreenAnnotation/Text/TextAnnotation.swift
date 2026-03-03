@@ -22,6 +22,15 @@ class TextAnnotation: Identifiable {
         self.bounds = CGRect(origin: position, size: CGSize(width: 200, height: 30))
     }
     
+    func deepCopy() -> TextAnnotation {
+        let copy = TextAnnotation(text: text, position: position, font: font, color: color)
+        copy.alignment = alignment
+        copy.isBold = isBold
+        copy.isItalic = isItalic
+        copy.bounds = bounds
+        return copy
+    }
+
     var effectiveFont: NSFont {
         var traits: NSFontTraitMask = []
         if isBold { traits.insert(.boldFontMask) }
@@ -54,13 +63,6 @@ class TextAnnotation: Identifiable {
         let frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, attrString.length), framePath, nil)
 
         context.saveGState()
-
-        // CoreText uses Y-up coordinates. When drawing in a flipped view,
-        // we need to flip the context around the text bounds, draw, then restore.
-        context.translateBy(x: bounds.origin.x, y: bounds.origin.y + bounds.height)
-        context.scaleBy(x: 1, y: -1)
-        context.translateBy(x: -bounds.origin.x, y: -bounds.origin.y)
-
         CTFrameDraw(frame, context)
         context.restoreGState()
     }

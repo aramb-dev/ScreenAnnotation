@@ -22,6 +22,19 @@ class ShapeAnnotation: Identifiable {
         self.bounds = path.bounds
     }
     
+    func deepCopy() -> ShapeAnnotation {
+        let copy = ShapeAnnotation(
+            shapeType: shapeType,
+            path: path.copy() as! NSBezierPath,
+            borderColor: borderColor,
+            fillColor: fillColor,
+            borderWidth: borderWidth,
+            opacity: opacity
+        )
+        copy.rotation = rotation
+        return copy
+    }
+
     var handlePositions: [CGPoint] {
         let rect = bounds
         return [
