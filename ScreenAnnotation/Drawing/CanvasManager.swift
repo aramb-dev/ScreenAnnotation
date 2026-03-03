@@ -12,7 +12,7 @@ enum ActiveTool: Equatable {
 }
 
 class CanvasManager: ObservableObject {
-    
+
     // MARK: - Published State
     @Published var activeTool: ActiveTool = .none
     @Published var currentColor: NSColor = .red
@@ -20,13 +20,27 @@ class CanvasManager: ObservableObject {
     @Published var currentOpacity: CGFloat = 1.0
     @Published var isDrawingEnabled: Bool = false
     @Published var selectedShapeType: RecognizedShapeType = .rectangle
-    
+
     // MARK: - Strokes
     private(set) var strokes: [Stroke] = []
     private var currentStroke: Stroke?
-    private var undoStack: [[Stroke]] = []
-    private var redoStack: [[Stroke]] = []
-    
+
+    // MARK: - Annotation Arrays
+    @Published var shapeAnnotations: [ShapeAnnotation] = []
+    @Published var textAnnotations: [TextAnnotation] = []
+    @Published var signatureAnnotations: [SignatureAnnotation] = []
+
+    // MARK: - Shape Interaction State
+    @Published var selectedShape: ShapeAnnotation?
+    var currentShapePreview: ShapeAnnotation?
+    private var shapeOrigin: CGPoint?
+
+    // MARK: - Text Interaction State
+    @Published var activeTextEditor: TextAnnotation?
+
+    // MARK: - Signature Placement State
+    @Published var pendingSignatureImage: NSImage?
+
     // MARK: - Tools
     private let drawingTools: [PenType: any DrawingTool] = [
         .pen: PenTool(),
@@ -38,16 +52,26 @@ class CanvasManager: ObservableObject {
         .watercolor: WatercolorTool(),
         .laserPointer: LaserPointerTool(),
     ]
-    
+
     let eraserTool = EraserTool()
     let lassoTool = LassoTool()
     let rulerTool = RulerTool()
     let shapeRecognizer = ShapeRecognizer()
-    
+
     // MARK: - Laser Pointer Timer
     private var laserFadeTimer: Timer?
     private var onNeedsDisplay: (() -> Void)?
-    
+
+    // MARK: - Undo / Redo
+    private struct CanvasState {
+        var strokes: [Stroke]
+        var shapeAnnotations: [ShapeAnnotation]
+        var textAnnotations: [TextAnnotation]
+        var signatureAnnotations: [SignatureAnnotation]
+    }
+    private var undoStack: [CanvasState] = []
+    private var redoStack: [CanvasState] = []
+
     var allStrokes: [Stroke] {
         var result = strokes
         if let current = currentStroke {
@@ -55,30 +79,30 @@ class CanvasManager: ObservableObject {
         }
         return result
     }
-    
+
     func setNeedsDisplayCallback(_ callback: @escaping () -> Void) {
         onNeedsDisplay = callback
     }
-    
+
     // MARK: - Tool Selection
-    
+
     func selectPen(_ penType: PenType) {
         activeTool = .drawing(penType)
     }
-    
+
     func selectEraser() {
         activeTool = .eraser
     }
-    
+
     func selectLasso() {
         activeTool = .lasso
     }
-    
+
     func selectRuler() {
         activeTool = .ruler
         rulerTool.toggle()
     }
-    
+
     func toggleEraser() {
         if activeTool == .eraser {
             activeTool = .drawing(.pen)
@@ -86,9 +110,9 @@ class CanvasManager: ObservableObject {
             activeTool = .eraser
         }
     }
-    
+
     private var toolBeforeDisable: ActiveTool = .drawing(.pen)
-    
+
     func toggleDrawing() {
         isDrawingEnabled.toggle()
         if isDrawingEnabled {
@@ -98,10 +122,25 @@ class CanvasManager: ObservableObject {
             activeTool = .none
         }
     }
-    
+
     // MARK: - Drawing
-    
+
     func beginStroke(at point: StrokePoint) {
+        // Signature placement takes priority
+        if let sigImage = pendingSignatureImage {
+            saveUndoState()
+            let size = sigImage.size
+            let frame = CGRect(
+                x: point.position.x - size.width / 2,
+                y: point.position.y - size.height / 2,
+                width: size.width,
+                height: size.height
+            )
+            signatureAnnotations.append(SignatureAnnotation(image: sigImage, frame: frame))
+            pendingSignatureImage = nil
+            return
+        }
+
         switch activeTool {
         case .drawing(let penType):
             guard let tool = drawingTools[penType] else { return }
@@ -110,64 +149,95 @@ class CanvasManager: ObservableObject {
             let processed = tool.processPoint(point, in: stroke)
             stroke.addPoint(processed)
             currentStroke = stroke
-            
+
         case .eraser:
             handleErase(at: point.position)
-            
+
         case .lasso:
             if lassoTool.hasSelection {
                 lassoTool.beginMove(at: point.position)
             } else {
                 lassoTool.beginSelection(at: point.position)
             }
-            
+
         case .ruler:
-            break
-            
-        default:
+            if rulerTool.isVisible && rulerTool.hitTest(point.position) {
+                rulerTool.beginDrag(at: point.position)
+            }
+
+        case .shape:
+            shapeOrigin = point.position
+            currentShapePreview = nil
+
+        case .text:
+            saveUndoState()
+            let annotation = TextAnnotation(
+                text: "",
+                position: point.position,
+                font: .systemFont(ofSize: max(currentWidth * 4, 16)),
+                color: currentColor
+            )
+            textAnnotations.append(annotation)
+            activeTextEditor = annotation
+
+        case .none:
             break
         }
     }
-    
+
     func continueStroke(to point: StrokePoint) {
         switch activeTool {
         case .drawing(let penType):
             guard let stroke = currentStroke, let tool = drawingTools[penType] else { return }
             var processedPoint = tool.processPoint(point, in: stroke)
-            
+
             // If ruler is visible and close, constrain to ruler edge
             if rulerTool.isVisible && rulerTool.distanceToRuler(from: point.position) < 40 {
                 processedPoint.position = rulerTool.constrainPoint(point.position)
             }
-            
+
             stroke.addPoint(processedPoint)
-            
+
             // Real-time smoothing for display
             if stroke.points.count >= 4 {
                 stroke.smoothedPoints = StrokeSmoothing.smooth(points: stroke.points)
             }
-            
+
         case .eraser:
             handleErase(at: point.position)
-            
+
         case .lasso:
             if lassoTool.hasSelection {
                 lassoTool.continueMove(to: point.position, strokes: &strokes)
             } else {
                 lassoTool.continueSelection(to: point.position)
             }
-            
+
+        case .ruler:
+            rulerTool.continueDrag(to: point.position)
+
+        case .shape:
+            guard let origin = shapeOrigin else { return }
+            let path = ShapeFactory.create(type: selectedShapeType, from: origin, to: point.position)
+            currentShapePreview = ShapeAnnotation(
+                shapeType: selectedShapeType,
+                path: path,
+                borderColor: currentColor,
+                borderWidth: currentWidth,
+                opacity: currentOpacity
+            )
+
         default:
             break
         }
     }
-    
+
     func endStroke(at point: StrokePoint) {
         switch activeTool {
         case .drawing(let penType):
             guard let stroke = currentStroke, let tool = drawingTools[penType] else { return }
             tool.finalizeStroke(stroke)
-            
+
             // Shape recognition: detect pause-to-snap
             if penType != .laserPointer {
                 if let recognized = shapeRecognizer.recognize(stroke: stroke) {
@@ -175,31 +245,42 @@ class CanvasManager: ObservableObject {
                     stroke.recognizedShapePath = recognized
                 }
             }
-            
+
             strokes.append(stroke)
             currentStroke = nil
-            
+
             // Start fade timer for laser pointer strokes
             if penType == .laserPointer {
                 startLaserFade(for: stroke)
             }
-            
+
         case .lasso:
             if lassoTool.hasSelection {
                 lassoTool.endMove()
             } else {
                 lassoTool.endSelection(in: strokes)
             }
-            
+
+        case .ruler:
+            rulerTool.endDrag()
+
+        case .shape:
+            if let preview = currentShapePreview {
+                saveUndoState()
+                shapeAnnotations.append(preview)
+            }
+            currentShapePreview = nil
+            shapeOrigin = nil
+
         default:
             break
         }
     }
-    
+
     func updateCursorPosition(_ point: CGPoint) {}
-    
+
     // MARK: - Eraser
-    
+
     private func handleErase(at point: CGPoint) {
         switch eraserTool.mode {
         case .object:
@@ -221,30 +302,28 @@ class CanvasManager: ObservableObject {
                     for (j, segment) in remaining.enumerated() {
                         strokes.insert(segment, at: i + j)
                     }
-                    // Adjust index: we removed 1 and inserted remaining.count,
-                    // but we iterate backwards so we only need to step past the inserted segments.
                     i += remaining.count - 1
                 }
                 i -= 1
             }
         }
     }
-    
+
     // MARK: - Laser Pointer Fade
-    
+
     private func startLaserFade(for stroke: Stroke) {
         let fadeStart = ProcessInfo.processInfo.systemUptime
         let duration = LaserPointerTool.fadeDuration
-        
+
         laserFadeTimer?.invalidate()
         laserFadeTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] timer in
             let elapsed = ProcessInfo.processInfo.systemUptime - fadeStart
             let progress = min(1.0, elapsed / duration)
             stroke.fadeAlpha = 1.0 - progress
             stroke.opacity = 1.0 - progress
-            
+
             self?.onNeedsDisplay?()
-            
+
             if progress >= 1.0 {
                 timer.invalidate()
                 self?.strokes.removeAll { $0.id == stroke.id }
@@ -252,50 +331,77 @@ class CanvasManager: ObservableObject {
             }
         }
     }
-    
+
     // MARK: - Undo / Redo
-    
+
     private func saveUndoState() {
-        undoStack.append(strokes)
+        undoStack.append(CanvasState(
+            strokes: strokes,
+            shapeAnnotations: shapeAnnotations,
+            textAnnotations: textAnnotations,
+            signatureAnnotations: signatureAnnotations
+        ))
         redoStack.removeAll()
-        // Limit undo history
         if undoStack.count > 50 {
             undoStack.removeFirst()
         }
     }
-    
+
     var canUndo: Bool { !undoStack.isEmpty }
     var canRedo: Bool { !redoStack.isEmpty }
-    
+
     func undo() {
         guard let previous = undoStack.popLast() else { return }
-        redoStack.append(strokes)
-        strokes = previous
+        redoStack.append(CanvasState(
+            strokes: strokes,
+            shapeAnnotations: shapeAnnotations,
+            textAnnotations: textAnnotations,
+            signatureAnnotations: signatureAnnotations
+        ))
+        strokes = previous.strokes
+        shapeAnnotations = previous.shapeAnnotations
+        textAnnotations = previous.textAnnotations
+        signatureAnnotations = previous.signatureAnnotations
     }
-    
+
     func redo() {
         guard let next = redoStack.popLast() else { return }
-        undoStack.append(strokes)
+        undoStack.append(CanvasState(
+            strokes: strokes,
+            shapeAnnotations: shapeAnnotations,
+            textAnnotations: textAnnotations,
+            signatureAnnotations: signatureAnnotations
+        ))
         if undoStack.count > 50 {
             undoStack.removeFirst()
         }
-        strokes = next
+        strokes = next.strokes
+        shapeAnnotations = next.shapeAnnotations
+        textAnnotations = next.textAnnotations
+        signatureAnnotations = next.signatureAnnotations
     }
-    
+
     func clearAll() {
         saveUndoState()
         strokes.removeAll()
         currentStroke = nil
+        shapeAnnotations.removeAll()
+        textAnnotations.removeAll()
+        signatureAnnotations.removeAll()
+        currentShapePreview = nil
+        shapeOrigin = nil
+        activeTextEditor = nil
+        pendingSignatureImage = nil
         lassoTool.clearSelection()
     }
-    
+
     // MARK: - Lasso Actions
-    
+
     func deleteSelectedStrokes() {
         saveUndoState()
         lassoTool.deleteSelected(from: &strokes)
     }
-    
+
     func duplicateSelectedStrokes() {
         saveUndoState()
         let duplicates = lassoTool.duplicateSelected(from: &strokes)

@@ -52,8 +52,15 @@ class TextAnnotation: Identifiable {
         let framesetter = CTFramesetterCreateWithAttributedString(attrString)
         let framePath = CGPath(rect: bounds, transform: nil)
         let frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, attrString.length), framePath, nil)
-        
+
         context.saveGState()
+
+        // CoreText uses Y-up coordinates. When drawing in a flipped view,
+        // we need to flip the context around the text bounds, draw, then restore.
+        context.translateBy(x: bounds.origin.x, y: bounds.origin.y + bounds.height)
+        context.scaleBy(x: 1, y: -1)
+        context.translateBy(x: -bounds.origin.x, y: -bounds.origin.y)
+
         CTFrameDraw(frame, context)
         context.restoreGState()
     }

@@ -16,6 +16,7 @@ struct FloatingToolbar: View {
         .sheet(isPresented: $showSignatureCapture) {
             SignatureCaptureView(isPresented: $showSignatureCapture) { image in
                 SignatureStore().save(signature: image)
+                canvasManager.pendingSignatureImage = image
             }
         }
     }

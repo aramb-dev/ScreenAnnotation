@@ -6,6 +6,10 @@ class RulerTool {
     var position: CGPoint = CGPoint(x: 400, y: 300)
     var angle: CGFloat = 0  // radians
     var length: CGFloat = 500
+
+    // Drag state
+    private(set) var isDragging: Bool = false
+    private var dragOffset: CGPoint = .zero
     
     var startPoint: CGPoint {
         let halfLength = length / 2
@@ -60,5 +64,21 @@ class RulerTool {
     
     func toggle() {
         isVisible.toggle()
+    }
+
+    // MARK: - Drag
+
+    func beginDrag(at point: CGPoint) {
+        isDragging = true
+        dragOffset = CGPoint(x: point.x - position.x, y: point.y - position.y)
+    }
+
+    func continueDrag(to point: CGPoint) {
+        guard isDragging else { return }
+        position = CGPoint(x: point.x - dragOffset.x, y: point.y - dragOffset.y)
+    }
+
+    func endDrag() {
+        isDragging = false
     }
 }

@@ -1,0 +1,13 @@
+import Cocoa
+
+/// A placed signature image on the canvas.
+class SignatureAnnotation: Identifiable {
+  let id = UUID()
+  var image: NSImage
+  var frame: CGRect
+
+  init(image: NSImage, frame: CGRect) {
+    self.image = image
+    self.frame = frame
+  }
+}
