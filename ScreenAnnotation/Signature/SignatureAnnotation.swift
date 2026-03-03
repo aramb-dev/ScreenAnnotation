@@ -12,6 +12,6 @@ class SignatureAnnotation: Identifiable {
   }
 
   func deepCopy() -> SignatureAnnotation {
-    return SignatureAnnotation(image: image.copy() as! NSImage, frame: frame)
+    return SignatureAnnotation(image: image.copy() as? NSImage ?? image, frame: frame)
   }
 }
