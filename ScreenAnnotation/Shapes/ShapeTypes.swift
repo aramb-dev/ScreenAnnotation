@@ -25,7 +25,7 @@ class ShapeAnnotation: Identifiable {
     func deepCopy() -> ShapeAnnotation {
         let copy = ShapeAnnotation(
             shapeType: shapeType,
-            path: path.copy() as! NSBezierPath,
+        path: path.copy() as? NSBezierPath ?? NSBezierPath(),
             borderColor: borderColor,
             fillColor: fillColor,
             borderWidth: borderWidth,
