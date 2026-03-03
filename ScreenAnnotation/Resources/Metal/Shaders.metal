@@ -45,13 +45,13 @@ vertex VertexOut strokeVertexShader(
 
 fragment float4 strokeFragmentShader(VertexOut in [[stage_in]]) {
     float4 color = in.color;
-    
+
     // Soft edge falloff based on distance from center of stroke (texCoord.x: 0=edge, 0.5=center, 1=edge)
     float distFromCenter = abs(in.texCoord.x - 0.5) * 2.0; // 0 at center, 1 at edge
     float edgeSoftness = 1.0 - smoothstep(0.7, 1.0, distFromCenter);
-    
-    color.a *= edgeSoftness;
-    
+
+    color.a *= edgeSoftness * in.opacity;
+
     return color;
 }
 

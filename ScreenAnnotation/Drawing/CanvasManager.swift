@@ -343,7 +343,11 @@ class CanvasManager: ObservableObject {
         }
         laserFadeTimers.removeAll()
     }
+<<<<<<< abumusa/1
 
+=======
+    
+>>>>>>> main
     // MARK: - Undo / Redo
 
     private static let maxUndoLevels = 50
@@ -370,6 +374,7 @@ class CanvasManager: ObservableObject {
 
     func undo() {
         guard let previous = undoStack.popLast() else { return }
+<<<<<<< abumusa/1
         redoStack.append(currentSnapshot())
         if redoStack.count > Self.maxUndoLevels {
             redoStack.removeFirst()
@@ -378,6 +383,10 @@ class CanvasManager: ObservableObject {
         shapeAnnotations = previous.shapeAnnotations
         textAnnotations = previous.textAnnotations
         signatureAnnotations = previous.signatureAnnotations
+=======
+        redoStack.append(strokes)
+        strokes = previous
+>>>>>>> main
         invalidateOrphanedLaserTimers()
     }
 
@@ -387,10 +396,14 @@ class CanvasManager: ObservableObject {
         if undoStack.count > Self.maxUndoLevels {
             undoStack.removeFirst()
         }
+<<<<<<< abumusa/1
         strokes = next.strokes
         shapeAnnotations = next.shapeAnnotations
         textAnnotations = next.textAnnotations
         signatureAnnotations = next.signatureAnnotations
+=======
+        strokes = next
+>>>>>>> main
         invalidateOrphanedLaserTimers()
     }
 

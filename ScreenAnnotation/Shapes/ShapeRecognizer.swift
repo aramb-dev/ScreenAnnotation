@@ -23,13 +23,12 @@ class ShapeRecognizer {
     
     /// Attempts to recognize a shape from the stroke. Returns a clean NSBezierPath if recognized.
     func recognize(stroke: Stroke) -> NSBezierPath? {
-        let points = stroke.points
-        guard points.count >= minimumPoints else { return nil }
-        
-        // Check for dwell at end of stroke (pause-to-snap)
-        guard detectDwell(in: points) else { return nil }
-        
-        let positions = points.map { $0.position }
+        // Use raw points for dwell detection (needs real timestamps)
+        guard stroke.points.count >= minimumPoints else { return nil }
+        guard detectDwell(in: stroke.points) else { return nil }
+
+        // Use smoothed points for geometry recognition (less noisy)
+        let positions = stroke.activePoints.map { $0.position }
         
         // Try recognition in order of specificity
         if let arrow = recognizeArrow(positions) { return arrow }

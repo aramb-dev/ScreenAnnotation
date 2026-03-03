@@ -140,13 +140,14 @@ class Stroke: Identifiable {
 
     var boundingRect: CGRect {
         guard !points.isEmpty else { return .zero }
+        let halfWidth = width / 2.0
         var minX = CGFloat.infinity, minY = CGFloat.infinity
         var maxX = -CGFloat.infinity, maxY = -CGFloat.infinity
         for p in activePoints {
-            minX = min(minX, p.position.x - width)
-            minY = min(minY, p.position.y - width)
-            maxX = max(maxX, p.position.x + width)
-            maxY = max(maxY, p.position.y + width)
+            minX = min(minX, p.position.x - halfWidth)
+            minY = min(minY, p.position.y - halfWidth)
+            maxX = max(maxX, p.position.x + halfWidth)
+            maxY = max(maxY, p.position.y + halfWidth)
         }
         return CGRect(x: minX, y: minY, width: maxX - minX, height: maxY - minY)
     }
