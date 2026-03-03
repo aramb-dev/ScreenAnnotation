@@ -1,0 +1,594 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		13B42E812F5783DE005B518F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B42E802F5783DE005B518F /* OnboardingView.swift */; };
+		AA000001 /* ScreenAnnotationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000001 /* ScreenAnnotationApp.swift */; };
+		AA000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000002 /* AppDelegate.swift */; };
+		AA000003 /* OverlayPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000003 /* OverlayPanelController.swift */; };
+		AA000004 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000004 /* CanvasView.swift */; };
+		AA000005 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000005 /* MetalRenderer.swift */; };
+		AA000006 /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000006 /* Stroke.swift */; };
+		AA000007 /* StrokeSmoothing.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000007 /* StrokeSmoothing.swift */; };
+		AA000008 /* DrawingTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000008 /* DrawingTool.swift */; };
+		AA000009 /* PenTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000009 /* PenTool.swift */; };
+		AA000010 /* FineTipPenTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000010 /* FineTipPenTool.swift */; };
+		AA000011 /* HighlighterTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000011 /* HighlighterTool.swift */; };
+		AA000012 /* PencilTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000012 /* PencilTool.swift */; };
+		AA000013 /* CrayonTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000013 /* CrayonTool.swift */; };
+		AA000014 /* CalligraphyTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000014 /* CalligraphyTool.swift */; };
+		AA000015 /* WatercolorTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000015 /* WatercolorTool.swift */; };
+		AA000016 /* LaserPointerTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000016 /* LaserPointerTool.swift */; };
+		AA000017 /* EraserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000017 /* EraserTool.swift */; };
+		AA000018 /* LassoTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000018 /* LassoTool.swift */; };
+		AA000019 /* RulerTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000019 /* RulerTool.swift */; };
+		AA000020 /* CanvasManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000020 /* CanvasManager.swift */; };
+		AA000021 /* ShapeRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000021 /* ShapeRecognizer.swift */; };
+		AA000022 /* ShapeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000022 /* ShapeTypes.swift */; };
+		AA000023 /* ShapeRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000023 /* ShapeRenderer.swift */; };
+		AA000024 /* ShapeHandles.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000024 /* ShapeHandles.swift */; };
+		AA000025 /* TabletInputManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000025 /* TabletInputManager.swift */; };
+		AA000026 /* TrackpadGestureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000026 /* TrackpadGestureManager.swift */; };
+		AA000027 /* ScribbleTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000027 /* ScribbleTool.swift */; };
+		AA000028 /* TextAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000028 /* TextAnnotation.swift */; };
+		AA000029 /* TextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000029 /* TextEditor.swift */; };
+		AA000030 /* SignatureCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000030 /* SignatureCapture.swift */; };
+		AA000031 /* SignatureStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000031 /* SignatureStore.swift */; };
+		AA000032 /* FloatingToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000032 /* FloatingToolbar.swift */; };
+		AA000033 /* ToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000033 /* ToolbarItems.swift */; };
+		AA000034 /* ColorPaletteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000034 /* ColorPaletteView.swift */; };
+		AA000035 /* StyleControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000035 /* StyleControls.swift */; };
+		AA000036 /* AddMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000036 /* AddMenu.swift */; };
+		AA000037 /* SnapshotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000037 /* SnapshotManager.swift */; };
+		AA000038 /* MultiMonitorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000038 /* MultiMonitorManager.swift */; };
+		AA000039 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000039 /* HotkeyManager.swift */; };
+		AA000040 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = AB000040 /* Shaders.metal */; };
+		AA000041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB000041 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		13B42E802F5783DE005B518F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		AB000001 /* ScreenAnnotationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenAnnotationApp.swift; sourceTree = "<group>"; };
+		AB000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AB000003 /* OverlayPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPanelController.swift; sourceTree = "<group>"; };
+		AB000004 /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		AB000005 /* MetalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
+		AB000006 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
+		AB000007 /* StrokeSmoothing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrokeSmoothing.swift; sourceTree = "<group>"; };
+		AB000008 /* DrawingTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingTool.swift; sourceTree = "<group>"; };
+		AB000009 /* PenTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenTool.swift; sourceTree = "<group>"; };
+		AB000010 /* FineTipPenTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FineTipPenTool.swift; sourceTree = "<group>"; };
+		AB000011 /* HighlighterTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlighterTool.swift; sourceTree = "<group>"; };
+		AB000012 /* PencilTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PencilTool.swift; sourceTree = "<group>"; };
+		AB000013 /* CrayonTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrayonTool.swift; sourceTree = "<group>"; };
+		AB000014 /* CalligraphyTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalligraphyTool.swift; sourceTree = "<group>"; };
+		AB000015 /* WatercolorTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatercolorTool.swift; sourceTree = "<group>"; };
+		AB000016 /* LaserPointerTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaserPointerTool.swift; sourceTree = "<group>"; };
+		AB000017 /* EraserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserTool.swift; sourceTree = "<group>"; };
+		AB000018 /* LassoTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LassoTool.swift; sourceTree = "<group>"; };
+		AB000019 /* RulerTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulerTool.swift; sourceTree = "<group>"; };
+		AB000020 /* CanvasManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasManager.swift; sourceTree = "<group>"; };
+		AB000021 /* ShapeRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeRecognizer.swift; sourceTree = "<group>"; };
+		AB000022 /* ShapeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeTypes.swift; sourceTree = "<group>"; };
+		AB000023 /* ShapeRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeRenderer.swift; sourceTree = "<group>"; };
+		AB000024 /* ShapeHandles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeHandles.swift; sourceTree = "<group>"; };
+		AB000025 /* TabletInputManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabletInputManager.swift; sourceTree = "<group>"; };
+		AB000026 /* TrackpadGestureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadGestureManager.swift; sourceTree = "<group>"; };
+		AB000027 /* ScribbleTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScribbleTool.swift; sourceTree = "<group>"; };
+		AB000028 /* TextAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAnnotation.swift; sourceTree = "<group>"; };
+		AB000029 /* TextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEditor.swift; sourceTree = "<group>"; };
+		AB000030 /* SignatureCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureCapture.swift; sourceTree = "<group>"; };
+		AB000031 /* SignatureStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureStore.swift; sourceTree = "<group>"; };
+		AB000032 /* FloatingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingToolbar.swift; sourceTree = "<group>"; };
+		AB000033 /* ToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarItems.swift; sourceTree = "<group>"; };
+		AB000034 /* ColorPaletteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteView.swift; sourceTree = "<group>"; };
+		AB000035 /* StyleControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleControls.swift; sourceTree = "<group>"; };
+		AB000036 /* AddMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMenu.swift; sourceTree = "<group>"; };
+		AB000037 /* SnapshotManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotManager.swift; sourceTree = "<group>"; };
+		AB000038 /* MultiMonitorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiMonitorManager.swift; sourceTree = "<group>"; };
+		AB000039 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
+		AB000040 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		AB000041 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AB000042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB000099 /* ScreenAnnotation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenAnnotation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AC000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AD000000 = {
+			isa = PBXGroup;
+			children = (
+				AD000001 /* ScreenAnnotation */,
+				AD000099 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AD000001 /* ScreenAnnotation */ = {
+			isa = PBXGroup;
+			children = (
+				AD000010 /* App */,
+				AD000011 /* Overlay */,
+				AD000012 /* Drawing */,
+				AD000013 /* Shapes */,
+				AD000014 /* Input */,
+				AD000015 /* Scribble */,
+				AD000016 /* Text */,
+				AD000017 /* Signature */,
+				AD000018 /* Toolbar */,
+				AD000019 /* Features */,
+				AD000020 /* Resources */,
+			);
+			path = ScreenAnnotation;
+			sourceTree = "<group>";
+		};
+		AD000010 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				AB000001 /* ScreenAnnotationApp.swift */,
+				AB000002 /* AppDelegate.swift */,
+				AB000042 /* Info.plist */,
+				13B42E802F5783DE005B518F /* OnboardingView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		AD000011 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				AB000003 /* OverlayPanelController.swift */,
+				AB000004 /* CanvasView.swift */,
+				AB000005 /* MetalRenderer.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		AD000012 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				AB000006 /* Stroke.swift */,
+				AB000007 /* StrokeSmoothing.swift */,
+				AB000008 /* DrawingTool.swift */,
+				AB000009 /* PenTool.swift */,
+				AB000010 /* FineTipPenTool.swift */,
+				AB000011 /* HighlighterTool.swift */,
+				AB000012 /* PencilTool.swift */,
+				AB000013 /* CrayonTool.swift */,
+				AB000014 /* CalligraphyTool.swift */,
+				AB000015 /* WatercolorTool.swift */,
+				AB000016 /* LaserPointerTool.swift */,
+				AB000017 /* EraserTool.swift */,
+				AB000018 /* LassoTool.swift */,
+				AB000019 /* RulerTool.swift */,
+				AB000020 /* CanvasManager.swift */,
+			);
+			path = Drawing;
+			sourceTree = "<group>";
+		};
+		AD000013 /* Shapes */ = {
+			isa = PBXGroup;
+			children = (
+				AB000021 /* ShapeRecognizer.swift */,
+				AB000022 /* ShapeTypes.swift */,
+				AB000023 /* ShapeRenderer.swift */,
+				AB000024 /* ShapeHandles.swift */,
+			);
+			path = Shapes;
+			sourceTree = "<group>";
+		};
+		AD000014 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				AB000025 /* TabletInputManager.swift */,
+				AB000026 /* TrackpadGestureManager.swift */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		AD000015 /* Scribble */ = {
+			isa = PBXGroup;
+			children = (
+				AB000027 /* ScribbleTool.swift */,
+			);
+			path = Scribble;
+			sourceTree = "<group>";
+		};
+		AD000016 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				AB000028 /* TextAnnotation.swift */,
+				AB000029 /* TextEditor.swift */,
+			);
+			path = Text;
+			sourceTree = "<group>";
+		};
+		AD000017 /* Signature */ = {
+			isa = PBXGroup;
+			children = (
+				AB000030 /* SignatureCapture.swift */,
+				AB000031 /* SignatureStore.swift */,
+			);
+			path = Signature;
+			sourceTree = "<group>";
+		};
+		AD000018 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				AB000032 /* FloatingToolbar.swift */,
+				AB000033 /* ToolbarItems.swift */,
+				AB000034 /* ColorPaletteView.swift */,
+				AB000035 /* StyleControls.swift */,
+				AB000036 /* AddMenu.swift */,
+			);
+			path = Toolbar;
+			sourceTree = "<group>";
+		};
+		AD000019 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				AB000037 /* SnapshotManager.swift */,
+				AB000038 /* MultiMonitorManager.swift */,
+				AB000039 /* HotkeyManager.swift */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		AD000020 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AB000041 /* Assets.xcassets */,
+				AD000021 /* Metal */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AD000021 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				AB000040 /* Shaders.metal */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		AD000099 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB000099 /* ScreenAnnotation.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AE000001 /* ScreenAnnotation */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AF000003 /* Build configuration list for PBXNativeTarget "ScreenAnnotation" */;
+			buildPhases = (
+				AE000010 /* Sources */,
+				AC000001 /* Frameworks */,
+				AE000011 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenAnnotation;
+			productName = ScreenAnnotation;
+			productReference = AB000099 /* ScreenAnnotation.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AE000099 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					AE000001 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = AF000001 /* Build configuration list for PBXProject "ScreenAnnotation" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AD000000;
+			productRefGroup = AD000099 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AE000001 /* ScreenAnnotation */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AE000011 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000041 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AE000010 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA000001 /* ScreenAnnotationApp.swift in Sources */,
+				AA000002 /* AppDelegate.swift in Sources */,
+				AA000003 /* OverlayPanelController.swift in Sources */,
+				AA000004 /* CanvasView.swift in Sources */,
+				AA000005 /* MetalRenderer.swift in Sources */,
+				AA000006 /* Stroke.swift in Sources */,
+				AA000007 /* StrokeSmoothing.swift in Sources */,
+				13B42E812F5783DE005B518F /* OnboardingView.swift in Sources */,
+				AA000008 /* DrawingTool.swift in Sources */,
+				AA000009 /* PenTool.swift in Sources */,
+				AA000010 /* FineTipPenTool.swift in Sources */,
+				AA000011 /* HighlighterTool.swift in Sources */,
+				AA000012 /* PencilTool.swift in Sources */,
+				AA000013 /* CrayonTool.swift in Sources */,
+				AA000014 /* CalligraphyTool.swift in Sources */,
+				AA000015 /* WatercolorTool.swift in Sources */,
+				AA000016 /* LaserPointerTool.swift in Sources */,
+				AA000017 /* EraserTool.swift in Sources */,
+				AA000018 /* LassoTool.swift in Sources */,
+				AA000019 /* RulerTool.swift in Sources */,
+				AA000020 /* CanvasManager.swift in Sources */,
+				AA000021 /* ShapeRecognizer.swift in Sources */,
+				AA000022 /* ShapeTypes.swift in Sources */,
+				AA000023 /* ShapeRenderer.swift in Sources */,
+				AA000024 /* ShapeHandles.swift in Sources */,
+				AA000025 /* TabletInputManager.swift in Sources */,
+				AA000026 /* TrackpadGestureManager.swift in Sources */,
+				AA000027 /* ScribbleTool.swift in Sources */,
+				AA000028 /* TextAnnotation.swift in Sources */,
+				AA000029 /* TextEditor.swift in Sources */,
+				AA000030 /* SignatureCapture.swift in Sources */,
+				AA000031 /* SignatureStore.swift in Sources */,
+				AA000032 /* FloatingToolbar.swift in Sources */,
+				AA000033 /* ToolbarItems.swift in Sources */,
+				AA000034 /* ColorPaletteView.swift in Sources */,
+				AA000035 /* StyleControls.swift in Sources */,
+				AA000036 /* AddMenu.swift in Sources */,
+				AA000037 /* SnapshotManager.swift in Sources */,
+				AA000038 /* MultiMonitorManager.swift in Sources */,
+				AA000039 /* HotkeyManager.swift in Sources */,
+				AA000040 /* Shaders.metal in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AF000010 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AF000011 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		AF000020 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScreenAnnotation/ScreenAnnotation.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = U8N2H82PMJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenAnnotation/App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annonation";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annonation";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AF000021 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = ScreenAnnotation/ScreenAnnotation.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = U8N2H82PMJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenAnnotation/App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annonation";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annonation";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AF000001 /* Build configuration list for PBXProject "ScreenAnnotation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF000010 /* Debug */,
+				AF000011 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AF000003 /* Build configuration list for PBXNativeTarget "ScreenAnnotation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF000020 /* Debug */,
+				AF000021 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AE000099 /* Project object */;
+}
