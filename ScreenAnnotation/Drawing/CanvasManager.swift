@@ -59,7 +59,7 @@ class CanvasManager: ObservableObject {
     let shapeRecognizer = ShapeRecognizer()
 
     // MARK: - Laser Pointer Timer
-    private var laserFadeTimer: Timer?
+    private var laserFadeTimers: [UUID: Timer] = [:]
     private var onNeedsDisplay: (() -> Void)?
 
     // MARK: - Undo / Redo
@@ -303,7 +303,9 @@ class CanvasManager: ObservableObject {
                     for (j, segment) in remaining.enumerated() {
                         strokes.insert(segment, at: i + j)
                     }
-                    i += remaining.count - 1
+                    // No index adjustment needed — we iterate backwards and the
+                    // inserted segments sit at i..i+remaining.count-1, which we skip
+                    // by simply decrementing i below.
                 }
                 i -= 1
             }
@@ -315,22 +317,31 @@ class CanvasManager: ObservableObject {
     private func startLaserFade(for stroke: Stroke) {
         let fadeStart = ProcessInfo.processInfo.systemUptime
         let duration = LaserPointerTool.fadeDuration
+        let strokeId = stroke.id
 
-        laserFadeTimer?.invalidate()
-        laserFadeTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] timer in
+        laserFadeTimers[strokeId]?.invalidate()
+        laserFadeTimers[strokeId] = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self, weak stroke] timer in
             let elapsed = ProcessInfo.processInfo.systemUptime - fadeStart
             let progress = min(1.0, elapsed / duration)
-            stroke.fadeAlpha = 1.0 - progress
-            stroke.opacity = 1.0 - progress
+            stroke?.fadeAlpha = 1.0 - progress
+            stroke?.opacity = 1.0 - progress
 
             self?.onNeedsDisplay?()
 
             if progress >= 1.0 {
                 timer.invalidate()
-                self?.strokes.removeAll { $0.id == stroke.id }
+                self?.laserFadeTimers.removeValue(forKey: strokeId)
+                self?.strokes.removeAll { $0.id == strokeId }
                 self?.onNeedsDisplay?()
             }
         }
+    }
+
+    deinit {
+        for timer in laserFadeTimers.values {
+            timer.invalidate()
+        }
+        laserFadeTimers.removeAll()
     }
 
     // MARK: - Undo / Redo
@@ -367,6 +378,7 @@ class CanvasManager: ObservableObject {
         shapeAnnotations = previous.shapeAnnotations
         textAnnotations = previous.textAnnotations
         signatureAnnotations = previous.signatureAnnotations
+        invalidateOrphanedLaserTimers()
     }
 
     func redo() {
@@ -379,6 +391,7 @@ class CanvasManager: ObservableObject {
         shapeAnnotations = next.shapeAnnotations
         textAnnotations = next.textAnnotations
         signatureAnnotations = next.signatureAnnotations
+        invalidateOrphanedLaserTimers()
     }
 
     func clearAll() {
@@ -393,6 +406,15 @@ class CanvasManager: ObservableObject {
         activeTextEditor = nil
         pendingSignatureImage = nil
         lassoTool.clearSelection()
+        invalidateOrphanedLaserTimers()
+    }
+
+    private func invalidateOrphanedLaserTimers() {
+        let activeIds = Set(strokes.map { $0.id })
+        for (id, timer) in laserFadeTimers where !activeIds.contains(id) {
+            timer.invalidate()
+            laserFadeTimers.removeValue(forKey: id)
+        }
     }
 
     // MARK: - Lasso Actions
