@@ -25,7 +25,7 @@ struct CalligraphyTool: DrawingTool {
         
         // Calligraphy effect: width varies based on angle between stroke direction and nib angle
         // Perpendicular to nib = thickest, parallel = thinnest
-        let angleDiff = abs(strokeAngle - nibAngle)
+        let angleDiff = atan2(sin(strokeAngle - nibAngle), cos(strokeAngle - nibAngle))
         let normalizedAngle = abs(sin(angleDiff))
         
         // Map to pressure: thin at 0° (parallel), thick at 90° (perpendicular)
