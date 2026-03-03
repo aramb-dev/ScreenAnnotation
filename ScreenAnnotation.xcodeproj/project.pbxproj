@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		13B42E812F5783DE005B518F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B42E802F5783DE005B518F /* OnboardingView.swift */; };
+		AA000043 /* PermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000043 /* PermissionManager.swift */; };
 		AA000001 /* ScreenAnnotationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000001 /* ScreenAnnotationApp.swift */; };
 		AA000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000002 /* AppDelegate.swift */; };
 		AA000003 /* OverlayPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000003 /* OverlayPanelController.swift */; };
@@ -95,6 +96,7 @@
 		AB000040 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		AB000041 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB000042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB000043 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
 		AB000099 /* ScreenAnnotation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenAnnotation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -142,6 +144,7 @@
 				AB000002 /* AppDelegate.swift */,
 				AB000042 /* Info.plist */,
 				13B42E802F5783DE005B518F /* OnboardingView.swift */,
+				AB000043 /* PermissionManager.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -381,6 +384,7 @@
 				AA000038 /* MultiMonitorManager.swift in Sources */,
 				AA000039 /* HotkeyManager.swift in Sources */,
 				AA000040 /* Shaders.metal in Sources */,
+				AA000043 /* PermissionManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,9 +524,9 @@
 				DEVELOPMENT_TEAM = U8N2H82PMJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenAnnotation/App/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annonation";
+				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annotation";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -530,7 +534,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annonation";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annotation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -550,9 +554,9 @@
 				DEVELOPMENT_TEAM = U8N2H82PMJ;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ScreenAnnotation/App/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annonation";
+				INFOPLIST_KEY_CFBundleDisplayName = "Screen Annotation";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				INFOPLIST_KEY_LSUIElement = NO;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026. All rights reserved.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -560,7 +564,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annonation";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.aramb-dev.screen-annotation";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -21,14 +21,7 @@ class HotkeyManager {
     /// Starts listening for global hotkeys. Returns false if accessibility permission is not granted.
     @discardableResult
     func start() -> Bool {
-        // Check silently first. Only prompt the system dialog if not yet trusted,
-        // and only do it once (the AppDelegate no longer retries, so this fires at most once).
-        let trusted = AXIsProcessTrusted()
-        if !trusted {
-            // Prompt once so the user sees the system dialog
-            let options = [kAXTrustedCheckOptionPrompt.takeRetainedValue(): true] as CFDictionary
-            AXIsProcessTrustedWithOptions(options)
-            print("[HotkeyManager] Accessibility permission not granted — prompted user")
+        guard AXIsProcessTrusted() else {
             return false
         }
         
