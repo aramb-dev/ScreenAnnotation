@@ -238,11 +238,11 @@ class CanvasManager: ObservableObject {
         let strokeId = stroke.id
 
         laserFadeTimers[strokeId]?.invalidate()
-        laserFadeTimers[strokeId] = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self] timer in
+        laserFadeTimers[strokeId] = Timer.scheduledTimer(withTimeInterval: 1.0 / 60.0, repeats: true) { [weak self, weak stroke] timer in
             let elapsed = ProcessInfo.processInfo.systemUptime - fadeStart
             let progress = min(1.0, elapsed / duration)
-            stroke.fadeAlpha = 1.0 - progress
-            stroke.opacity = 1.0 - progress
+            stroke?.fadeAlpha = 1.0 - progress
+            stroke?.opacity = 1.0 - progress
 
             self?.onNeedsDisplay?()
 
@@ -253,6 +253,13 @@ class CanvasManager: ObservableObject {
                 self?.onNeedsDisplay?()
             }
         }
+    }
+
+    deinit {
+        for timer in laserFadeTimers.values {
+            timer.invalidate()
+        }
+        laserFadeTimers.removeAll()
     }
     
     // MARK: - Undo / Redo

@@ -268,7 +268,7 @@ class MetalRenderer: NSObject, MTKViewDelegate {
                 Float(color.redComponent),
                 Float(color.greenComponent),
                 Float(color.blueComponent),
-                Float(color.alphaComponent) * opacity
+                Float(color.alphaComponent)
             )
             
             let texY = Float(i) / Float(points.count - 1)
