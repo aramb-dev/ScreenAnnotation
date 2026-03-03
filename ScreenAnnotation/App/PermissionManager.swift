@@ -10,9 +10,14 @@ final class PermissionManager: ObservableObject {
   var allGranted: Bool { accessibilityGranted && screenRecordingGranted }
 
   private var pollTimer: Timer?
+  private var screenRecordingTask: Task<Void, Never>?
 
   init() {
     refresh()
+  }
+
+  deinit {
+    stopPolling()
   }
 
   // MARK: - Polling
@@ -27,6 +32,8 @@ final class PermissionManager: ObservableObject {
   func stopPolling() {
     pollTimer?.invalidate()
     pollTimer = nil
+    screenRecordingTask?.cancel()
+    screenRecordingTask = nil
   }
 
   // MARK: - Status checks
@@ -37,16 +44,19 @@ final class PermissionManager: ObservableObject {
   }
 
   private func checkScreenRecordingAsync() {
-    Task {
+    screenRecordingTask?.cancel()
+    screenRecordingTask = Task { [weak self] in
       do {
         let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
+        guard !Task.isCancelled else { return }
         let granted = !content.displays.isEmpty
-        await MainActor.run { [granted] in
-          self.screenRecordingGranted = granted
+        await MainActor.run {
+          self?.screenRecordingGranted = granted
         }
       } catch {
+        guard !Task.isCancelled else { return }
         await MainActor.run {
-          self.screenRecordingGranted = false
+          self?.screenRecordingGranted = false
         }
       }
     }

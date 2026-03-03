@@ -2,6 +2,7 @@ import SwiftUI
 
 struct OnboardingView: View {
   @ObservedObject var permissions: PermissionManager
+  var initialStep: Int = 0
   var onComplete: () -> Void
 
   @State private var step = 0
@@ -63,7 +64,10 @@ struct OnboardingView: View {
       .padding(.bottom, 24)
     }
     .frame(width: 480, height: 420)
-    .onAppear { permissions.startPolling() }
+    .onAppear {
+      step = initialStep
+      permissions.startPolling()
+    }
     .onDisappear { permissions.stopPolling() }
   }
 
@@ -101,10 +105,7 @@ struct OnboardingView: View {
         granted: permissions.accessibilityGranted,
         title: "Accessibility",
         description: "Required for global keyboard shortcuts.",
-        action: {
-          permissions.promptAccessibility()
-          permissions.openAccessibilitySettings()
-        }
+        action: { permissions.openAccessibilitySettings() }
       )
 
       // Screen Recording

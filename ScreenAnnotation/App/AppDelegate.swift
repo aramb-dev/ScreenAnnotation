@@ -12,9 +12,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   private var localKeyMonitor: Any?
   private var globalKeyMonitor: Any?
   private var toggleDrawingMenuItem: NSMenuItem?
+  private var clearAllMenuItem: NSMenuItem?
+  private var toggleToolbarMenuItem: NSMenuItem?
 
   private var onboardingWindow: NSWindow?
   private let permissionManager = PermissionManager()
+  private var isActivated = false
 
   private var hasCompletedOnboarding: Bool {
     get { UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") }
@@ -42,9 +45,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // MARK: - Activation (post-onboarding)
 
   private func activateApp() {
+    guard !isActivated else { return }
+    isActivated = true
+
     setupOverlays()
     setupLocalHotkey()
     setupHotkeysDeferred()
+    setMenuItemsEnabled(true)
   }
 
   func completeOnboarding() {
@@ -56,14 +63,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   // MARK: - Onboarding Window
 
-  func showOnboardingWindow() {
+  func showOnboardingWindow(initialStep: Int = 0) {
     if let existing = onboardingWindow {
       existing.makeKeyAndOrderFront(nil)
       NSApp.activate(ignoringOtherApps: true)
       return
     }
 
-    let view = OnboardingView(permissions: permissionManager) { [weak self] in
+    let view = OnboardingView(
+      permissions: permissionManager,
+      initialStep: initialStep
+    ) { [weak self] in
       self?.completeOnboarding()
     }
 
@@ -94,14 +104,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     menu.addItem(toggleItem)
 
     menu.addItem(NSMenuItem.separator())
-    menu.addItem(NSMenuItem(title: "Clear All", action: #selector(clearAll), keyEquivalent: ""))
-    menu.addItem(NSMenuItem(title: "Toggle Toolbar", action: #selector(toggleToolbarAction), keyEquivalent: ""))
+
+    let clearItem = NSMenuItem(title: "Clear All", action: #selector(clearAll), keyEquivalent: "")
+    clearAllMenuItem = clearItem
+    menu.addItem(clearItem)
+
+    let toolbarItem = NSMenuItem(title: "Toggle Toolbar", action: #selector(toggleToolbarAction), keyEquivalent: "")
+    toggleToolbarMenuItem = toolbarItem
+    menu.addItem(toolbarItem)
+
     menu.addItem(NSMenuItem.separator())
     menu.addItem(NSMenuItem(title: "Permissions…", action: #selector(showPermissions), keyEquivalent: ""))
     menu.addItem(NSMenuItem(title: "Show Welcome", action: #selector(showWelcome), keyEquivalent: ""))
     menu.addItem(NSMenuItem.separator())
     menu.addItem(NSMenuItem(title: "Quit", action: #selector(quitApp), keyEquivalent: "q"))
     statusItem?.menu = menu
+
+    setMenuItemsEnabled(hasCompletedOnboarding)
+  }
+
+  private func setMenuItemsEnabled(_ enabled: Bool) {
+    toggleDrawingMenuItem?.isEnabled = enabled
+    clearAllMenuItem?.isEnabled = enabled
+    toggleToolbarMenuItem?.isEnabled = enabled
   }
 
   // MARK: - Overlay Setup
@@ -187,17 +212,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // MARK: - CGEvent Tap (optional — elevates hotkeys to work in secure input fields)
 
   private func setupHotkeysDeferred() {
-    hotkeyManager = HotkeyManager()
-    hotkeyManager?.onToggleStealth = { [weak self] in self?.toggleStealth() }
-    hotkeyManager?.onUndo = { [weak self] in
+    let manager = HotkeyManager()
+    hotkeyManager = manager
+    manager.onToggleStealth = { [weak self] in self?.toggleStealth() }
+    manager.onUndo = { [weak self] in
       self?.overlayControllers.forEach { $0.canvasManager?.undo() }
     }
-    hotkeyManager?.onClearAll = { [weak self] in self?.clearAll() }
-    hotkeyManager?.onToggleEraser = { [weak self] in
+    manager.onClearAll = { [weak self] in self?.clearAll() }
+    manager.onToggleEraser = { [weak self] in
       self?.overlayControllers.forEach { $0.canvasManager?.toggleEraser() }
     }
 
-    if !hotkeyManager!.start() {
+    if !manager.start() {
       print("[AppDelegate] Accessibility not granted — hotkeys work via NSEvent monitors.")
     }
   }
@@ -205,22 +231,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   // MARK: - Actions
 
   @objc private func toggleDrawing() {
+    guard isActivated else { return }
     drawingEnabled.toggle()
     overlayControllers.forEach { $0.setDrawingEnabled(drawingEnabled) }
     updateDrawingUI(enabled: drawingEnabled)
   }
 
   @objc private func clearAll() {
+    guard isActivated else { return }
     for controller in overlayControllers {
       controller.canvasManager?.clearAll()
     }
   }
 
   @objc private func toggleToolbarAction() {
+    guard isActivated else { return }
     toolbarController?.toggleVisibility()
   }
 
   private func toggleStealth() {
+    guard isActivated else { return }
     toolbarController?.toggleVisibility()
     for controller in overlayControllers {
       controller.toggleCursorVisibility()
@@ -228,12 +258,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   @objc private func showPermissions() {
-    // Re-use onboarding window starting at permissions step
-    showOnboardingWindow()
+    showOnboardingWindow(initialStep: 1)
   }
 
   @objc private func showWelcome() {
-    showOnboardingWindow()
+    showOnboardingWindow(initialStep: 0)
   }
 
   @objc private func quitApp() {
