@@ -280,8 +280,9 @@ class CanvasManager: ObservableObject {
         guard let previous = undoStack.popLast() else { return }
         redoStack.append(strokes)
         strokes = previous
+        invalidateOrphanedLaserTimers()
     }
-    
+
     func redo() {
         guard let next = redoStack.popLast() else { return }
         undoStack.append(strokes)
@@ -289,13 +290,23 @@ class CanvasManager: ObservableObject {
             undoStack.removeFirst()
         }
         strokes = next
+        invalidateOrphanedLaserTimers()
     }
-    
+
     func clearAll() {
         saveUndoState()
         strokes.removeAll()
         currentStroke = nil
         lassoTool.clearSelection()
+        invalidateOrphanedLaserTimers()
+    }
+
+    private func invalidateOrphanedLaserTimers() {
+        let activeIds = Set(strokes.map { $0.id })
+        for (id, timer) in laserFadeTimers where !activeIds.contains(id) {
+            timer.invalidate()
+            laserFadeTimers.removeValue(forKey: id)
+        }
     }
     
     // MARK: - Lasso Actions
