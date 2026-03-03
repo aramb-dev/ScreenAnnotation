@@ -20,6 +20,11 @@ class MetalRenderer: NSObject, MTKViewDelegate {
     private let commandQueue: MTLCommandQueue
     private var pipelineState: MTLRenderPipelineState?
     private var highlighterPipelineState: MTLRenderPipelineState?
+    private var pencilPipelineState: MTLRenderPipelineState?
+    private var crayonPipelineState: MTLRenderPipelineState?
+    private var watercolorPipelineState: MTLRenderPipelineState?
+    private var calligraphyPipelineState: MTLRenderPipelineState?
+    private var laserPointerPipelineState: MTLRenderPipelineState?
     weak var canvasManager: CanvasManager?
     
     init(device: MTLDevice, pixelFormat: MTLPixelFormat) {
@@ -77,6 +82,71 @@ class MetalRenderer: NSObject, MTKViewDelegate {
         } catch {
             print("[MetalRenderer] Failed to create highlighter pipeline: \(error)")
         }
+
+        // Pencil pipeline
+        pencilPipelineState = buildStandardBlendPipeline(
+            vertexFunction: vertexFunction,
+            fragmentName: "pencilFragmentShader",
+            library: library,
+            pixelFormat: pixelFormat
+        )
+
+        // Crayon pipeline
+        crayonPipelineState = buildStandardBlendPipeline(
+            vertexFunction: vertexFunction,
+            fragmentName: "crayonFragmentShader",
+            library: library,
+            pixelFormat: pixelFormat
+        )
+
+        // Watercolor pipeline
+        watercolorPipelineState = buildStandardBlendPipeline(
+            vertexFunction: vertexFunction,
+            fragmentName: "watercolorFragmentShader",
+            library: library,
+            pixelFormat: pixelFormat
+        )
+
+        // Calligraphy pipeline
+        calligraphyPipelineState = buildStandardBlendPipeline(
+            vertexFunction: vertexFunction,
+            fragmentName: "calligraphyFragmentShader",
+            library: library,
+            pixelFormat: pixelFormat
+        )
+
+        // Laser pointer pipeline
+        laserPointerPipelineState = buildStandardBlendPipeline(
+            vertexFunction: vertexFunction,
+            fragmentName: "laserPointerFragmentShader",
+            library: library,
+            pixelFormat: pixelFormat
+        )
+    }
+
+    private func buildStandardBlendPipeline(
+        vertexFunction: MTLFunction?,
+        fragmentName: String,
+        library: MTLLibrary,
+        pixelFormat: MTLPixelFormat
+    ) -> MTLRenderPipelineState? {
+        let desc = MTLRenderPipelineDescriptor()
+        desc.vertexFunction = vertexFunction
+        desc.fragmentFunction = library.makeFunction(name: fragmentName)
+        desc.colorAttachments[0].pixelFormat = pixelFormat
+        desc.colorAttachments[0].isBlendingEnabled = true
+        desc.colorAttachments[0].rgbBlendOperation = .add
+        desc.colorAttachments[0].alphaBlendOperation = .add
+        desc.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
+        desc.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        desc.colorAttachments[0].sourceAlphaBlendFactor = .one
+        desc.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        do {
+            return try device.makeRenderPipelineState(descriptor: desc)
+        } catch {
+            print("[MetalRenderer] Failed to create \(fragmentName) pipeline: \(error)")
+            return nil
+        }
     }
     
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
@@ -114,11 +184,24 @@ class MetalRenderer: NSObject, MTKViewDelegate {
             )
             
             // Choose pipeline based on pen type
-            if stroke.penType == .highlighter {
-                encoder.setRenderPipelineState(highlighterPipelineState ?? pipelineState)
-            } else {
-                encoder.setRenderPipelineState(pipelineState)
+            let selectedPipeline: MTLRenderPipelineState
+            switch stroke.penType {
+            case .highlighter:
+                selectedPipeline = highlighterPipelineState ?? pipelineState
+            case .pencil:
+                selectedPipeline = pencilPipelineState ?? pipelineState
+            case .crayon:
+                selectedPipeline = crayonPipelineState ?? pipelineState
+            case .watercolor:
+                selectedPipeline = watercolorPipelineState ?? pipelineState
+            case .calligraphy:
+                selectedPipeline = calligraphyPipelineState ?? pipelineState
+            case .laserPointer:
+                selectedPipeline = laserPointerPipelineState ?? pipelineState
+            default:
+                selectedPipeline = pipelineState
             }
+            encoder.setRenderPipelineState(selectedPipeline)
             
             encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
             encoder.setVertexBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
