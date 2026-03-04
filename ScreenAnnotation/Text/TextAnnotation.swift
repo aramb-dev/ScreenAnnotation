@@ -22,6 +22,15 @@ class TextAnnotation: Identifiable {
         self.bounds = CGRect(origin: position, size: CGSize(width: 200, height: 30))
     }
     
+    func deepCopy() -> TextAnnotation {
+        let copy = TextAnnotation(text: text, position: position, font: font, color: color)
+        copy.alignment = alignment
+        copy.isBold = isBold
+        copy.isItalic = isItalic
+        copy.bounds = bounds
+        return copy
+    }
+
     var effectiveFont: NSFont {
         var traits: NSFontTraitMask = []
         if isBold { traits.insert(.boldFontMask) }
@@ -52,7 +61,7 @@ class TextAnnotation: Identifiable {
         let framesetter = CTFramesetterCreateWithAttributedString(attrString)
         let framePath = CGPath(rect: bounds, transform: nil)
         let frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, attrString.length), framePath, nil)
-        
+
         context.saveGState()
         CTFrameDraw(frame, context)
         context.restoreGState()

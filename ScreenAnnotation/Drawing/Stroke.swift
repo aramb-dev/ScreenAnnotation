@@ -127,6 +127,17 @@ class Stroke: Identifiable {
         for i in smoothedPoints.indices { smoothedPoints[i].position.x += dx; smoothedPoints[i].position.y += dy }
     }
     
+    func deepCopy() -> Stroke {
+        let copy = Stroke(penType: penType, color: color, width: width, opacity: opacity)
+        copy.points = points
+        copy.smoothedPoints = smoothedPoints
+        copy.createdAt = createdAt
+        copy.fadeAlpha = fadeAlpha
+        copy.isRecognizedShape = isRecognizedShape
+        copy.recognizedShapePath = recognizedShapePath?.copy() as? NSBezierPath
+        return copy
+    }
+
     var boundingRect: CGRect {
         guard !points.isEmpty else { return .zero }
         let halfWidth = width / 2.0

@@ -50,6 +50,8 @@
 		AA000039 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000039 /* HotkeyManager.swift */; };
 		AA000040 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = AB000040 /* Shaders.metal */; };
 		AA000041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB000041 /* Assets.xcassets */; };
+		AA000050 /* AnnotationOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000050 /* AnnotationOverlayView.swift */; };
+		AA000051 /* SignatureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB000051 /* SignatureAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,7 +98,8 @@
 		AB000040 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		AB000041 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB000042 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AB000043 /* PermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionManager.swift; sourceTree = "<group>"; };
+		AB000050 /* AnnotationOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnotationOverlayView.swift; sourceTree = "<group>"; };
+		AB000051 /* SignatureAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignatureAnnotation.swift; sourceTree = "<group>"; };
 		AB000099 /* ScreenAnnotation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenAnnotation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -155,6 +158,7 @@
 				AB000003 /* OverlayPanelController.swift */,
 				AB000004 /* CanvasView.swift */,
 				AB000005 /* MetalRenderer.swift */,
+				AB000050 /* AnnotationOverlayView.swift */,
 			);
 			path = Overlay;
 			sourceTree = "<group>";
@@ -223,6 +227,7 @@
 			children = (
 				AB000030 /* SignatureCapture.swift */,
 				AB000031 /* SignatureStore.swift */,
+				AB000051 /* SignatureAnnotation.swift */,
 			);
 			path = Signature;
 			sourceTree = "<group>";
@@ -384,7 +389,8 @@
 				AA000038 /* MultiMonitorManager.swift in Sources */,
 				AA000039 /* HotkeyManager.swift in Sources */,
 				AA000040 /* Shaders.metal in Sources */,
-				AA000043 /* PermissionManager.swift in Sources */,
+				AA000050 /* AnnotationOverlayView.swift in Sources */,
+				AA000051 /* SignatureAnnotation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,6 +22,19 @@ class ShapeAnnotation: Identifiable {
         self.bounds = path.bounds
     }
     
+    func deepCopy() -> ShapeAnnotation {
+        let copy = ShapeAnnotation(
+            shapeType: shapeType,
+        path: path.copy() as? NSBezierPath ?? NSBezierPath(),
+            borderColor: borderColor,
+            fillColor: fillColor,
+            borderWidth: borderWidth,
+            opacity: opacity
+        )
+        copy.rotation = rotation
+        return copy
+    }
+
     var handlePositions: [CGPoint] {
         let rect = bounds
         return [
@@ -108,6 +121,78 @@ struct ShapeFactory {
         return path
     }
     
+    /// Creates a shape path from two drag points based on the given shape type.
+    static func create(type: RecognizedShapeType, from origin: CGPoint, to end: CGPoint) -> NSBezierPath {
+        let rect = CGRect(
+            x: min(origin.x, end.x),
+            y: min(origin.y, end.y),
+            width: abs(end.x - origin.x),
+            height: abs(end.y - origin.y)
+        )
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 2
+
+        switch type {
+        case .line:
+            return createLine(from: origin, to: end)
+        case .arrow:
+            return createArrow(from: origin, to: end)
+        case .circle:
+            return createCircle(center: center, radius: radius)
+        case .ellipse:
+            return NSBezierPath(ovalIn: rect)
+        case .rectangle:
+            return createRectangle(rect)
+        case .triangle:
+            let path = NSBezierPath()
+            path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+            path.line(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.line(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.close()
+            return path
+        case .star:
+            return createStar(center: center, outerRadius: radius, innerRadius: radius * 0.4)
+        case .speechBubble:
+            return createSpeechBubble(rect)
+        case .heart:
+            return createHeart(in: rect)
+        case .cloud:
+            return createRoundedRectangle(rect, cornerRadius: min(rect.width, rect.height) * 0.3)
+        }
+    }
+
+    static func createHeart(in rect: CGRect) -> NSBezierPath {
+        let path = NSBezierPath()
+        let width = rect.width
+        let height = rect.height
+        let x = rect.minX
+        let y = rect.minY
+
+        path.move(to: CGPoint(x: x + width / 2, y: y + height))
+        path.curve(
+            to: CGPoint(x: x, y: y + height * 0.35),
+            controlPoint1: CGPoint(x: x + width / 2, y: y + height * 0.75),
+            controlPoint2: CGPoint(x: x, y: y + height * 0.6)
+        )
+        path.curve(
+            to: CGPoint(x: x + width / 2, y: y + height * 0.2),
+            controlPoint1: CGPoint(x: x, y: y),
+            controlPoint2: CGPoint(x: x + width / 2, y: y)
+        )
+        path.curve(
+            to: CGPoint(x: x + width, y: y + height * 0.35),
+            controlPoint1: CGPoint(x: x + width / 2, y: y),
+            controlPoint2: CGPoint(x: x + width, y: y)
+        )
+        path.curve(
+            to: CGPoint(x: x + width / 2, y: y + height),
+            controlPoint1: CGPoint(x: x + width, y: y + height * 0.6),
+            controlPoint2: CGPoint(x: x + width / 2, y: y + height * 0.75)
+        )
+        path.close()
+        return path
+    }
+
     static func createSpeechBubble(_ rect: CGRect) -> NSBezierPath {
         let path = NSBezierPath(roundedRect: rect, xRadius: 10, yRadius: 10)
         
